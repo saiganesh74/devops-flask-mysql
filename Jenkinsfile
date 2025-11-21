@@ -27,7 +27,7 @@ pipeline{
         }
         stage("Running tests"){
             steps{
-                sh "echo "Running tests for Jenkins build " "
+                sh 'echo "Running tests for Jenkins build "'
             }
         }
     }
