@@ -31,4 +31,15 @@ pipeline{
             }
         }
     }
+    posts{
+        success{
+            echo "Ayyyyy Build succedded"
+        }
+        failure{
+            echo "NAHHHHH build failed"
+        }
+        always{
+            echo "Pipeline run is done"
+        }
+    }
 }
