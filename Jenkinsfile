@@ -25,5 +25,10 @@ pipeline{
                 sh 'docker run -d -p ${PORT}:${PORT} --name ${CONTAINER_NAME} ${IMAGE_NAME}:latest'
             }
         }
+        stage("Running tests"){
+            steps{
+                sh "echo "Running tests for Jenkins build " "
+            }
+        }
     }
 }
