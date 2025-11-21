@@ -40,7 +40,7 @@ pipeline{
         }
         always{
             echo "Pipeline run is done"
-            echo "webhooks test" >> webhook-test.txt
+            sh 'echo "webhook test" >> webhook-test.txt'
         }
     }
 }
