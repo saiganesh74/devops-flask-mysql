@@ -16,16 +16,19 @@ pipeline {
                 git branch: BRANCH, url: REPO_URL
             }
         }
+
         stage("Build Docker Image") {
             steps {
                 sh 'docker build -t ${IMAGE_NAME}:latest .'
             }
         }
+        
         stage("Tag Docker Image") {
             steps {
                 sh 'docker tag ${IMAGE_NAME}:latest ${DOCKER_HUB_IMAGE}:latest'
             }
         }
+
         stage("Push to Docker Hub") {
             steps {
                 withCredentials([usernamePassword(
@@ -38,15 +41,16 @@ pipeline {
                 }
             }
         }
-stage("Deploy to EC2") {
-    steps {
-        sshagent(['ec2-ssh']) {
-            sh '''
-                ssh -o StrictHostKeyChecking=no ubuntu@13.60.174.168 "
-                    docker stop flask-app || true &&
-                    docker rm flask-app || true &&
-                    docker pull saiganesh74/flask-app:latest &&
-                    docker run -d -p 5000:5000 --name flask-app saiganesh74/flask-app:latest
+
+        stage("Deploy to EC2") {
+            steps {
+                sshagent(['ec2-ssh']) {
+                    sh '''
+                        ssh -o StrictHostKeyChecking=no ubuntu@13.60.174.168 "
+                        docker stop flask-app || true &&
+                        docker rm flask-app || true &&
+                        docker pull saiganesh74/flask-app:latest &&
+                        docker run -d -p 5000:5000 --name flask-app saiganesh74/flask-app:latest
                 "
             '''
         }
