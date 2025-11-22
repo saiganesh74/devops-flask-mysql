@@ -46,7 +46,7 @@ pipeline {
 
 stage("Deploy to EC2") {
     steps {
-        sshagent(['ubuntu']) {
+        sshagent(['ec2-ssh']) {
             sh '''
                 ssh -o StrictHostKeyChecking=no ubuntu@13.60.174.168 "
                     docker ps -q --filter 'publish=5000' | xargs -r docker stop &&
