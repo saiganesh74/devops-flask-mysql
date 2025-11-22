@@ -32,12 +32,11 @@ pipeline{
                     usernameVariable: 'DOCKER_USER',
                     passwordVariable: 'DOCKER_PASS'
                 )]){
-                    sh 'echo $DOCKER_PASS' | docker login -u $DOCKER_USER --password-stdin
-                    sh 'docker push ${DOCKER_HUB_IMAGE}:latest'
+                    sh  " 'echo $DOCKER_PASS' | docker login -u $DOCKER_USER --password-stdin "                    sh 'docker push ${DOCKER_HUB_IMAGE}:latest'
                 }
             }
         }
-        
+
         stage("Running container"){
             steps{
                 sh 'docker rm -f ${CONTAINER_NAME} || true'
