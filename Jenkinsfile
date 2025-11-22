@@ -43,21 +43,22 @@ pipeline {
                 }
             }
         }
-        
-        stage("Deploy to EC2") {
-            steps {
-                sshagent (credentials: ['ec2-ssh']) {
-                    sh """
-                        ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} '
-                            docker pull ${DOCKER_HUB_IMAGE}:latest &&
-                            docker stop ${CONTAINER_NAME} || true &&
-                            docker rm ${CONTAINER_NAME} || true &&
-                            docker run -d -p ${PORT}:${PORT} --name ${CONTAINER_NAME} ${DOCKER_HUB_IMAGE}:latest
-                        '
-                    """
-                }
-            }
+
+stage("Deploy to EC2") {
+    steps {
+        sshagent(['ubuntu']) {
+            sh '''
+                ssh -o StrictHostKeyChecking=no ubuntu@13.60.174.168 "
+                    docker ps -q --filter 'publish=5000' | xargs -r docker stop &&
+                    docker ps -aq --filter 'publish=5000' | xargs -r docker rm &&
+                    docker pull saiganesh74/flask-app:latest &&
+                    docker run -d -p 5000:5000 --name flask-app saiganesh74/flask-app:latest
+                "
+            '''
         }
+    }
+}
+
         stage("Run Tests") {
             steps {
                 sh 'echo "Running tests…"'
