@@ -22,7 +22,7 @@ pipeline{
         }
         stage("Tagging image for Docker Hub"){
             steps{
-                sh 'docker tag ${IMAGE_NAME}:latest ${DOCKER_HUB_NAME}:latest'
+                sh 'docker tag ${IMAGE_NAME}:latest ${DOCKER_HUB_IMAGE}:latest'
             }
         }
         stage("Pushing the image into Docker Hub"){
