@@ -37,6 +37,7 @@ pipeline{
                 }
             }
         }
+        
         stage("Running container"){
             steps{
                 sh 'docker rm -f ${CONTAINER_NAME} || true'
