@@ -3,10 +3,11 @@ pipeline{
 
     environment{
         REPO_URL = 'https://github.com/saiganesh74/devops-flask-mysql.git'
-        BRANCH = 'main'
         IMAGE_NAME = 'flask-app'
+        DOCKER_HUB_IMAGE = 'saiganesh74/flask-app'
         CONTAINER_NAME = 'flask-container'
         PORT = '5000'
+        BRANCH = 'main'
     }
     stages{
         stage('Clone Repo'){
@@ -17,6 +18,23 @@ pipeline{
         stage("Build Docker Image"){
             steps{
                 sh 'docker build -t ${IMAGE_NAME}:latest .'
+            }
+        }
+        stage("Tagging image for Docker Hub"){
+            steps{
+                sh 'docker tag ${IMAGE_NAME}:latest ${DOCKER_HUB_NAME}:latest'
+            }
+        }
+        stage("Pushing the image into Docker Hub"){
+            steps{
+                withCredentials([usernamePassword(
+                    credentialsid: 'docker-hub-creds',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]){
+                    sh 'echo $DOCKER_PASS' | docker login -u $DOCKER_USER --password-stdin
+                    sh 'docker push ${DOCKER_HUB_IMAGE}:latest'
+                }
             }
         }
         stage("Running container"){
@@ -40,7 +58,6 @@ pipeline{
         }
         always{
             echo "Pipeline run is done"
-            sh 'echo "webhook test" >> webhook-test.txt'
         }
     }
 }
