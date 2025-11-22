@@ -22,7 +22,7 @@ pipeline {
                 sh 'docker build -t ${IMAGE_NAME}:latest .'
             }
         }
-        
+
         stage("Tag Docker Image") {
             steps {
                 sh 'docker tag ${IMAGE_NAME}:latest ${DOCKER_HUB_IMAGE}:latest'
@@ -59,7 +59,7 @@ pipeline {
 
         stage("Run Tests") {
             steps {
-                sh 'echo "Running tests…"'
+                sh 'pytest -q --disable-warnings --maxfail=1'
             }
         }
     }
