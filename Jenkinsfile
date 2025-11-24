@@ -16,6 +16,7 @@ pipeline {
                 git branch: BRANCH, url: REPO_URL
             }
         }
+        
         stage("Build Docker Image") {
             steps {
                 sh 'docker build -t ${IMAGE_NAME}:latest .'
