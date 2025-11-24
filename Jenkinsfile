@@ -56,7 +56,6 @@ pipeline {
         }
     }
 }
-
         stage("Run Tests") {
             steps {
                 sh 'pytest -q --disable-warnings --maxfail=1'
