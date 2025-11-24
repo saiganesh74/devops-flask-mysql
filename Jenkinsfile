@@ -16,7 +16,7 @@ pipeline {
                 git branch: BRANCH, url: REPO_URL
             }
         }
-        
+
         stage("Build Docker Image") {
             steps {
                 sh 'docker build -t ${IMAGE_NAME}:latest .'
@@ -46,7 +46,7 @@ pipeline {
             steps {
                 sshagent(['ec2-ssh']) {
                     sh '''
-                        ssh -o StrictHostKeyChecking=no ubuntu@${EC@_HOST}
+                        ssh -o StrictHostKeyChecking=no ubuntu@${EC2_HOST}
                         docker stop flask-app || true &&
                         docker rm flask-app || true &&
                         docker pull {DOCKER_HUB_IMAGE}:latest &&
