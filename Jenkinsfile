@@ -6,7 +6,7 @@ pipeline {
         DOCKER_HUB_IMAGE = 'saiganesh74/flask-app'
         CONTAINER_NAME = 'flask-app'
         EC2_USER = 'ubuntu'
-        EC2_HOST = '13.60.174.168'
+        EC2_HOST = '43.204.108.234'
         PORT = '5000'
         BRANCH = 'main'
     }
@@ -46,10 +46,10 @@ pipeline {
             steps {
                 sshagent(['ec2-ssh']) {
                     sh '''
-                        ssh -o StrictHostKeyChecking=no ubuntu@13.60.174.168 "
+                        ssh -o StrictHostKeyChecking=no ubuntu@${EC@_HOST}
                         docker stop flask-app || true &&
                         docker rm flask-app || true &&
-                        docker pull saiganesh74/flask-app:latest &&
+                        docker pull {DOCKER_HUB_IMAGE}:latest &&
                         docker run -d -p 5000:5000 --name flask-app saiganesh74/flask-app:latest
                 "
             '''
