@@ -10,7 +10,6 @@ pipeline {
         PORT = '5000'
         BRANCH = 'main'
     }
-
     stages {
         stage('Clone Repo') {
             steps {
