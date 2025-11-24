@@ -42,20 +42,21 @@ pipeline {
             }
         }
 
-        stage("Deploy to EC2") {
-            steps {
-                sshagent(['ec2-ssh']) {
-                    sh '''
-                        ssh -o StrictHostKeyChecking=no ubuntu@${EC2_HOST}
-                        docker stop flask-app || true &&
-                        docker rm flask-app || true &&
-                        docker pull {DOCKER_HUB_IMAGE}:latest &&
-                        docker run -d -p 5000:5000 --name flask-app saiganesh74/flask-app:latest
+stage("Deploy to EC2") {
+    steps {
+        sshagent(['ec2-ssh']) {
+            sh '''
+                ssh -o StrictHostKeyChecking=no ubuntu@${EC2_HOST} "
+                    docker stop flask-app || true &&
+                    docker rm flask-app || true &&
+                    docker pull ${DOCKER_HUB_IMAGE}:latest &&
+                    docker run -d -p 5000:5000 --name flask-app ${DOCKER_HUB_IMAGE}:latest
                 "
             '''
         }
     }
 }
+
         stage("Run Tests") {
             steps {
                 sh 'pytest -q --disable-warnings --maxfail=1'
